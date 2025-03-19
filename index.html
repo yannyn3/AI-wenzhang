@@ -2638,6 +2638,9 @@
                             <button id="downloadMarkdownBtn" class="flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition-colors duration-200 ml-2">
                                 <i class="fas fa-download mr-1.5"></i>下载Markdown
                             </button>
+                            <button id="openDoocsMdBtn" class="flex items-center justify-center px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg shadow transition-colors duration-200 ml-2">
+                                <i class="fas fa-external-link-alt mr-1.5"></i>在Doocs/MD中打开
+                            </button>
                         </div>
                     </div>
                     
@@ -13032,6 +13035,33 @@
                 }, 3000);
             }).catch(err => {
                 console.error("复制失败:", err);
+                // 显示错误提示
+                const toast = document.createElement("div");
+                toast.className = "fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in";
+                toast.innerHTML = "<i class=\"fas fa-times-circle mr-2\"></i>复制失败，请重试";
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            });
+        });
+
+        // 添加跳转到Doocs/MD平台的功能
+        document.getElementById("openDoocsMdBtn")?.addEventListener("click", function() {
+            const markdownContent = getMarkdownContent();
+            
+            // 复制内容到剪贴板
+            navigator.clipboard.writeText(markdownContent).then(() => {
+                // 显示成功提示
+                const toast = document.createElement("div");
+                toast.className = "fixed bottom-4 right-4 bg-purple-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 animate-fade-in";
+                toast.innerHTML = "<i class=\"fas fa-check-circle mr-2\"></i>已复制内容，正在跳转到Doocs/MD平台";
+                document.body.appendChild(toast);
+                
+                // 3秒后移除提示
+                setTimeout(() => toast.remove(), 3000);
+                
+                // 跳转到Doocs/MD平台
+                window.open('https://md.doocs.org/', '_blank');
+            }).catch(err => {
                 alert("复制Markdown失败，请重试");
             });
         });
